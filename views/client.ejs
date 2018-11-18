@@ -50,6 +50,14 @@
             input {
                 margin-right: 6px;
             }
+
+            .snackbar{
+                position: fixed;
+                bottom: 5px;
+                width: 70%;
+                text-align: center;
+                padding-bottom: 2px;
+            }
         </style>
 
         <script>
@@ -90,6 +98,13 @@
                     }
                     orders.push(newOrder);
                     localStorage.setItem('pizza-orders', JSON.stringify(orders));
+
+                    //alert("Your order has been submitted. It will reach you within 50 mins");
+                    document.getElementById("success_text").innerHTML = "Your order has been submitted. It will reach you within 50 mins.";
+                    document.getElementById("success_snackbar").style.setProperty('display', 'block'); 
+                    setTimeout(() => {
+                        document.getElementById("success_snackbar").style.setProperty('display', 'none');
+                    }, 3000); 
 
                 }
                 else{
@@ -322,6 +337,9 @@
                 </div>
             </div>
         </form>
+        <div id="success_snackbar" class="alert alert-success snackbar" role="alert" style="display: none;">
+            <p id="success_text"></p>
+        </div>
         </div>
     </body>
         
