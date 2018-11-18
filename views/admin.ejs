@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--Required Meta Tags-->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <!--Bootstrap CSS-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+        
+        <!--Javascripts: Jquery & BootstrapJS-->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <title>GoogleMaps CO</title>
+        
+        <style>
+            html{
+                height: 100%;
+            }
+            body{
+                height: 100%;
+                background-color: #0086b3
+            }
+
+            .vertical-separator{
+                width: 1px;
+                background-color: hsl(184, 100%, 60%);
+                height: inherit;
+                margin-left: 0.5px;
+                margin-right: 0.5px;
+            }
+
+            .text-subtext{
+                font-size: 0.8em;
+                font-weight: bold;
+                color: #555555
+            }
+
+            .nav-pills > .nav-link.active {
+                background-color: red;
+            }
+            .nav-pills > a.active:hover{
+                background-color: rgb(218, 0, 0);
+            }
+            .nav-pills > .nav-link {
+                color: whitesmoke   
+            }
+
+            input {
+                margin-right: 6px;
+            }
+
+            table, th, td{
+                border: 1px dashed gray;
+                padding: 5px;
+            }
+        </style>
+
+        <script>
+            const ingredient_map = {
+                "crust-size": {
+                    "handtossed-small"  :   "Handtossed Small(10\")",
+                    "handtossed-medium" :   "Handtossed Medium(12\")",
+                    "handtossed-large"  :   "Handtossed Large(14\")",
+                    "handtossed-xlarge" :   "Handtossed X-Large(16\")",
+                    "handmade-medium"   :   "Handmade Medium(12\")",
+                    "crusty-medium"     :   "Thin Crust Medium(12\")",
+                    "crusty-large"      :   "Thin Crust Large(14\")",
+                    "brooklyn-large"    :   "Brooklyn Large(14\")",
+                    "brooklyn-xlarge"   :   "Brooklyn X-Large(16\")",
+                    "glutenfree-small"  :   "Gluten-free Small(10\")"
+                },
+                "cheese": {
+                    "no-cheese" :   "No Cheese",
+                    "cheese"    :   "Cheese"
+                },
+                "sauce": {
+                    "marinara"  :   "Hearty Marinara Sauce",
+                    "bbq"       :   "BBQ Sauce",
+                    "alfredo"   :   "Alfredo Sauce",
+                    "garlic"    :   "Garlic Parmesan White Sauce",
+                    "tomato"    :   "Robust Inspired Tomato Sauce"
+                },
+                "meats": {
+                    "pepperoni" :   "Pepperoni",
+                    "sausage"   :   "Italian Sausage",
+                    "beef"      :   "Beef",
+                    "ham"       :   "Ham",
+                    "steak"     :   "Philly Steak",
+                    "bacon"     :   "Bacon",
+                    "chicken"   :   "Premium Chicken"
+                },
+                "nonmeats": {
+                    "black-olives"      :   "Black Olives",
+                    "green-peppers"     :   "Green Peppers",
+                    "spinach"           :   "Spinach",
+                    "mushrooms"         :   "Mushrooms",
+                    "onions"            :   "Onions",
+                    "pineapple"         :   "Pineapple",
+                    "diced-tomato"      :   "Diced Tomato",
+                    "feta-cheese"       :   "Feta Cheese",
+                    "cheddar-cheese"    :   "Cheddar Cheese",
+                    "hot-sauce"         :   "Hot Sauce"
+                }
+            };
+
+            window.onload = function(){
+                let current_orders = JSON.parse(localStorage.getItem('pizza-orders'));
+
+                var ordersTable = document.createElement('table');
+                var tHead = document.createElement('tr');
+                tHead.innerHTML = "<th>Order No</th> <th>Crust/Size</th> <th>Cheese</th> <th>Sauce</th> <th>Toppings</th>";
+                ordersTable.appendChild(tHead);
+
+                for(var i=0; i< current_orders.length; i++){
+                    var tRow = document.createElement('tr');
+
+                    //order No
+                    var order_num = document.createElement('td');
+                    order_num.innerHTML = i;
+
+                    //Crust/Size
+                    var crust_size = document.createElement('td')
+                    crust_size.innerHTML = ingredient_map['crust-size'][current_orders[i]['crust-size']];
+
+                    //Cheese
+                    var cheese = document.createElement('td')
+                    cheese.innerHTML = ingredient_map['cheese'][current_orders[i]['cheese']]; 
+
+                    //Sauce
+                    var sauce = document.createElement('td')
+                    sauce.innerHTML = ingredient_map['sauce'][current_orders[i]['sauce']]; 
+
+                    //Toppings
+                    var toppings = document.createElement('td')
+                    try{
+                        for(var j=0; j< current_orders[i]['meats'].length; j++){
+                            toppings.innerHTML += ingredient_map['meats'][current_orders[i]['meats'][j]] + ",";
+                        }
+                    }
+                    catch(e){
+                        toppings.innerHTML += "";
+                    }
+                    try{
+                        for(var j=0; j< current_orders[i]['nonmeats'].length; j++){
+                            toppings.innerHTML += ingredient_map['nonmeats'][current_orders[i]['nonmeats'][j]] + ",";
+                        }
+                    }
+                    catch(e){
+                        toppings.innerHTML += "";
+                    }
+                    
+                    tRow.appendChild(order_num);
+                    tRow.appendChild(crust_size);
+                    tRow.appendChild(cheese);
+                    tRow.appendChild(sauce);
+                    tRow.appendChild(toppings);
+
+                    ordersTable.appendChild(tRow);
+                }
+                document.getElementById('orders-list').appendChild(ordersTable);
+            }
+        </script>
+    
+    </head>
+    
+    <body>
+        <div><h2 class="text-center text-light font-weight-light mt-2">Build Your Own Pizza - Admin<img src="/images/pizza.ico" width="80px" height="80px"></h2></div>
+        <div class="container p-2 w-90 h-80 bg-light ">
+            <nav class="navbar navbar-light my-2 p-2 rounded d-flex justify-content-center w-100" style="background-color:rgb(124, 159, 223)">
+                <div class="nav nav-pills red" id="nav-tab" role="tablist" style="font-weight: 600; color:mintcream">
+                    <a class="nav-item nav-link active" id="nav-dashboard-tab" data-toggle="tab" href="#nav-dashboard" role="tab" aria-controls="nav-dashboard" aria-selected="true">DASHBOARD</a>
+                    <a class="nav-item nav-link" id="nav-orders-tab" data-toggle="tab" href="#nav-orders" role="tab" aria-controls="nav-orders" aria-selected="true">ORDERS</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                
+                <!--Size & Crust Tab-->
+                <div class="tab-pane fade show active" id="nav-dashboard" role="tabpanel" aria-labelledby="nav-dashboard-tab">
+                    <div class="container">
+                        <div class="row">
+                            <div class="card card-body border-0"> 
+                                <h3 class="font-weight-light text-info">ORDER SUMMARY</h3>
+                                <div class="row mt-4">
+                                    <div class="col-md-3">
+                                        Pie-chart
+                                    </div>
+
+                                    <div class="vertical-separator"></div>
+
+                                    <div class="col-md-8">
+                                        Multi-level Sankey chart
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+                
+                <div class="tab-pane fade" id="nav-orders" role="tabpanel" aria-labelledby="nav-orders-tab">
+                        <div class="container">
+                            <div class="row">
+                                <div class="card card-body border-0"> 
+                                    <div id="orders-list" class="mt-4">
+                                        <span class="text-info font-weight-bold">Current Orders</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </body>
+        
+</html>

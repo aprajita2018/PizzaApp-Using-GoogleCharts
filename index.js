@@ -15,6 +15,10 @@ app.get('/', function(req, res){
     res.render("client");
 });
 
+app.get('/admin', function(req, res){
+  res.render("admin");
+});
+
 //express js server listening on 3000
 // Start the server
 const PORT = process.env.PORT || 3000;
