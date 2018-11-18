@@ -12,6 +12,9 @@
         <!--Javascripts: Jquery & BootstrapJS-->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        
+        <!--Google Charts API-->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <title>GoogleMaps CO</title>
         
         <style>
@@ -104,6 +107,11 @@
                     "hot-sauce"         :   "Hot Sauce"
                 }
             };
+            
+            var piechart_data = {};
+            var piechart_array = [['Item', 'Number of pizzas']];
+            var sankeychart_data = {};
+            var sankeychart_array = [];
 
             window.onload = function(){
                 let current_orders = JSON.parse(localStorage.getItem('pizza-orders'));
@@ -123,20 +131,25 @@
                     //Crust/Size
                     var crust_size = document.createElement('td')
                     crust_size.innerHTML = ingredient_map['crust-size'][current_orders[i]['crust-size']];
+                    sankeychart_data[ingredient_map['crust-size'][current_orders[i]['crust-size']]] = sankeychart_data[ingredient_map['crust-size'][current_orders[i]['crust-size']]] || {};
 
                     //Cheese
                     var cheese = document.createElement('td')
-                    cheese.innerHTML = ingredient_map['cheese'][current_orders[i]['cheese']]; 
+                    cheese.innerHTML = ingredient_map['cheese'][current_orders[i]['cheese']];
+                    sankeychart_data[ingredient_map['crust-size'][current_orders[i]['crust-size']]][ingredient_map['cheese'][current_orders[i]['cheese']]] = ++sankeychart_data[ingredient_map['crust-size'][current_orders[i]['crust-size']]][ingredient_map['cheese'][current_orders[i]['cheese']]] || 1;
+                    sankeychart_data[ingredient_map['cheese'][current_orders[i]['cheese']]] = sankeychart_data[ingredient_map['cheese'][current_orders[i]['cheese']]] || {}; 
 
                     //Sauce
                     var sauce = document.createElement('td')
-                    sauce.innerHTML = ingredient_map['sauce'][current_orders[i]['sauce']]; 
+                    sauce.innerHTML = ingredient_map['sauce'][current_orders[i]['sauce']];
+                    sankeychart_data[ingredient_map['cheese'][current_orders[i]['cheese']]][ingredient_map['sauce'][current_orders[i]['sauce']]] = ++sankeychart_data[ingredient_map['cheese'][current_orders[i]['cheese']]][ingredient_map['sauce'][current_orders[i]['sauce']]] || 1;
 
                     //Toppings
                     var toppings = document.createElement('td')
                     try{
                         for(var j=0; j< current_orders[i]['meats'].length; j++){
                             toppings.innerHTML += ingredient_map['meats'][current_orders[i]['meats'][j]] + ",";
+                            piechart_data[[ingredient_map['meats'][current_orders[i]['meats'][j]]]] = ++piechart_data[[ingredient_map['meats'][current_orders[i]['meats'][j]]]] || 1;
                         }
                     }
                     catch(e){
@@ -145,6 +158,7 @@
                     try{
                         for(var j=0; j< current_orders[i]['nonmeats'].length; j++){
                             toppings.innerHTML += ingredient_map['nonmeats'][current_orders[i]['nonmeats'][j]] + ",";
+                            piechart_data[[ingredient_map['nonmeats'][current_orders[i]['nonmeats'][j]]]] = ++piechart_data[[ingredient_map['nonmeats'][current_orders[i]['nonmeats'][j]]]] || 1;
                         }
                     }
                     catch(e){
@@ -160,7 +174,51 @@
                     ordersTable.appendChild(tRow);
                 }
                 document.getElementById('orders-list').appendChild(ordersTable);
+                console.log(JSON.stringify(sankeychart_data));
+                Object.keys(piechart_data).forEach(function(key){
+                    piechart_array.push([key, piechart_data[key]]);
+                });
+                Object.keys(sankeychart_data).forEach(function(key){
+                    Object.keys(sankeychart_data[key]).forEach(function(innerKey){
+                        sankeychart_array.push([key, innerKey, sankeychart_data[key][innerKey]])
+                    })
+                });
+
+                console.log(sankeychart_array);
             }
+            
+
+            //Pie-chart and Sankey chart using Google Charts
+            google.charts.load('current', {'packages':['corechart', 'sankey']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                var data_pie = google.visualization.arrayToDataTable(piechart_array);
+
+                var options_pie = {
+                };
+
+                var chart_pie = new google.visualization.PieChart(document.getElementById('piechart'));
+
+                chart_pie.draw(data_pie, options_pie);
+
+
+                var data_sankey = new google.visualization.DataTable();
+                data_sankey.addColumn('string', 'From');
+                data_sankey.addColumn('string', 'To');
+                data_sankey.addColumn('number', 'Weight');
+                data_sankey.addRows(sankeychart_array);
+
+                // Sets chart options.
+                var options_sankey = {
+                //width: 600,
+                };
+
+                // Instantiates and draws our chart, passing in some options.
+                var chart_sankey = new google.visualization.Sankey(document.getElementById('sankeychart'));
+                chart_sankey.draw(data_sankey, options_sankey);
+            }
+
         </script>
     
     </head>
@@ -183,14 +241,20 @@
                             <div class="card card-body border-0"> 
                                 <h3 class="font-weight-light text-info">ORDER SUMMARY</h3>
                                 <div class="row mt-4">
-                                    <div class="col-md-3">
-                                        Pie-chart
+                                    <div class="col-md-4">
+                                        Ingredient summary
+                                        <div id="piechart">
+
+                                        </div>
                                     </div>
 
                                     <div class="vertical-separator"></div>
 
-                                    <div class="col-md-8">
-                                        Multi-level Sankey chart
+                                    <div class="col-md-7">
+                                        Order journey breakdown
+                                        <div id="sankeychart">
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
