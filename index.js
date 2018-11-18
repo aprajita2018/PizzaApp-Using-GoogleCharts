@@ -8,7 +8,7 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 //specify the path of static directory
-app.use(express.static(__dirname + './public'));
+app.use(express.static(__dirname + '/public'));
 
 //Routes
 app.get('/', function(req, res){

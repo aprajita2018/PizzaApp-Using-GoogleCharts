@@ -15,12 +15,13 @@
         <title>GoogleMaps CO</title>
         
         <style>
-            html{height: 100%;}
+            html{
+                height: 100%;
+            }
             body{
                 height: 100%;
-                margin: 0%;
-                padding: 0%;
-                background-color: #0086b3 }
+                background-color: #0086b3
+            }
 
             .vertical-separator{
                 width: 1px;
@@ -29,93 +30,124 @@
                 margin-left: 0.5px;
                 margin-right: 0.5px;
             }
+
+            .text-subtext{
+                font-size: 0.8em;
+                font-weight: bold;
+                color: #555555
+            }
+
+            .nav-pills > .nav-link.active {
+                background-color: red;
+            }
+            .nav-pills > a.active:hover{
+                background-color: rgb(218, 0, 0);
+            }
+            .nav-pills > .nav-link {
+                color: whitesmoke   
+            }
+
+            input {
+                margin-right: 6px;
+            }
         </style>
 
         <script>
-            window.onload = function() {
-					if (localStorage) {
-						document.getElementById('submitButton').addEventListener('click', function() {
-							var mathQuestion = document.getElementById('math').line.value;
-							var numQues = 0;
-							if(mathQuestion != ""){
-								numQues +=1;
-							}
-							localStorage.setItem('ques1', mathQuestion);
-							localStorage.setItem('quanCount', numQues);
-						});
-					}
-				}
+            function buildPizza(e){
+                e.preventDefault();
+
+                console.log(e.target)
+            }
         </script>
     
     </head>
     
     <body>
-        <div><h2 class="text-center text-light font-weight-light mt-2">Build Your Own Pizza</h2></div>
-        <div class="container mt-5 p-2 w-90 h-80 bg-light ">
+        <div><h2 class="text-center text-light font-weight-light mt-2"><img src="/images/pizza.ico" width="80px" height="80px">Build Your Own Pizza</h2></div>
+        <div class="container p-2 w-90 h-80 bg-light ">
             <nav class="navbar navbar-light my-2 p-2 rounded d-flex justify-content-center w-100" style="background-color:rgb(124, 159, 223)">
-                <div class="nav nav-pills" id="nav-tab" role="tablist" style="font-weight: 600; color:mintcream">
-                    <a class="nav-item nav-link active text-white bg-danger" id="nav-demo-tab" data-toggle="tab" href="#nav-demo" role="tab" aria-controls="nav-demo" aria-selected="true">SIZE & CRUST</a>
-                    <a class="nav-item nav-link text-white bg-info" id="nav-vitals-tab" data-toggle="tab" href="#nav-vitals" role="tab" aria-controls="nav-vitals" aria-selected="false">CHEESE & SAUCE</a>
-                    <a class="nav-item nav-link text-white bg-info" id="nav-report-tab" data-toggle="tab" href="#nav-report" role="tab" aria-controls="nav-report" aria-selected="false">TOPPINGS</a>
+                <div class="nav nav-pills red" id="nav-tab" role="tablist" style="font-weight: 600; color:mintcream">
+                    <a class="nav-item nav-link active" id="nav-crust-tab" data-toggle="tab" href="#nav-crust" role="tab" aria-controls="nav-crust" aria-selected="true">SIZE & CRUST</a>
+                    <a class="nav-item nav-link" id="nav-sauce-tab" data-toggle="tab" href="#nav-sauce" role="tab" aria-controls="nav-sauce" aria-selected="false">CHEESE & SAUCE</a>
+                    <a class="nav-item nav-link" id="nav-topping-tab" data-toggle="tab" href="#nav-topping" role="tab" aria-controls="nav-topping" aria-selected="false">TOPPINGS</a>
                 </div>
             </nav>
-
+            <form name="build-pizza">
             <div class="tab-content" id="nav-tabContent">
-
+                
                 <!--Size & Crust Tab-->
-                <div class="tab-pane fade show active" id="nav-demo" role="tabpanel" aria-labelledby="nav-demo-tab">
+                <div class="tab-pane fade show active" id="nav-crust" role="tabpanel" aria-labelledby="nav-crust-tab">
                     <div class="container">
-                        <div class="row mt-1 p-1">
+                        <div class="row">
                             <div class="card card-body border-0"> 
                                 <h3 class="font-weight-light text-info">CHOOSE SIZE & CRUST</h3>
-                                <div class="row mt-3">
-                                    <div class="col-md-3">
-                                        <h5 class="text-info font-weight-light">HAND TOSSED</h5>
-                                        <p class="float-left">Garlic-seasoned crust with a rich buttery taste.</p><br>
-                                        <div class="hand-tossed mt-5 p-1">
-                                            <input  type="radio" value="small" name="handtossed" id="handtossed">Small(10")<br>
-                                            <input  type="radio" value="medium" name="handtossed" id="handtossed">Medium(12")<br>
-                                            <input  type="radio" value="large" name="handtossed" id="handtossed">Large(14")<br>
-                                            <input  type="radio" value="xlarge" name="handtossed" id="handtossed">X-Large(16")<br>
-                                        </div>
+                                <div class="row mt-4">
 
+                                    <div class="col-md-3 my-2">
+                                        <h5 class="text-info font-weight-light">HAND TOSSED</h5>
+                                        <p class="float-left text-subtext">Garlic-seasoned crust with a rich buttery taste.</p><br>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="handtossed-small" name="crust-size">Small(10")</label>
+                                        </div>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="handtossed-medium" name="crust-size">Medium(12")</label>
+                                        </div>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="handtossed-large" name="crust-size">Large(14")</label>
+                                        </div>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="handtossed-xlarge" name="crust-size">X-Large(16")</label>
+                                        </div>
                                     </div>
                                     <div class="vertical-separator"><br/></div>
-                                    <div class="col-md-3">
+
+                                    <div class="col-md-3  my-2">
                                         <h5 class="text-info font-weight-light">HANDMADE PAN</h5>
-                                        <p class="float-left">Two layers of cheese, toppings to the edge and a crust that bakes up golden and crispy with a buttery taste.</p>
-                                        <div class="hand-made mt-5 p-1">
-                                            <input  type="radio" value="medium" name="handmade" id="handmade">Medium(12")<br>
+                                        <p class="float-left text-subtext">Two layers of cheese, toppings to the edge and a crust that bakes up golden and crispy with a buttery taste.</p>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="handmade-medium" name="crust-size">Medium(12")</label>
                                         </div>
                                     </div>
+
                                     <div class="vertical-separator"><br/></div>
-                                    <div class="col-md-3">
+
+                                    <div class="col-md-3 my-2">
                                         <h5 class="text-info font-weight-light">CRUNCHY THIN CRUST</h5>
-                                        <p class="float-left">Thin enough for the optimum crispy to crunchy ratio.</p>
-                                        <div class="crunchy-tc mt-5 p-1">
-                                            <input  type="radio" value="medium" name="crunchy" id="crunchy">Medium(12")<br>
-                                            <input  type="radio" value="large" name="crunchy" id="crunchy">Large(14")<br>
+                                        <p class="float-left text-subtext">Thin enough for the optimum crispy to crunchy ratio.</p>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="crusty-medium" name="crust-size">Medium(12")</label>
+                                        </div>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="crusty-large" name="crust-size">Large(14")</label>
                                         </div>
                                     </div>
+
                                     <div class="vertical-separator"><br/></div>
+
                                     <br/>
                                     <br/>
-                                    <div class="col-md-3">
+
+                                    <div class="col-md-3 my-2">
                                         <h5 class="text-info font-weight-light">BROOKLYN STYLE</h5>
-                                        <p class="float-left">Hand stretched to be big, thin, and perfectly foldable.</p>
-                                        <div class="brooklyn mt-5 p-1">
-                                            <input  type="radio" value="large" name="brooklyn-style" id="brooklyn-style">Large(14")<br>
-                                            <input  type="radio" value="xlarge" name="brooklyn-style" id="brooklyn-style">X-Large(16")<br>
+                                        <p class="float-left text-subtext">Hand stretched to be big, thin, and perfectly foldable.</p>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="brooklyn-large" name="crust-size">Large(14")</label>
+                                        </div>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="brooklyn-xlarge" name="crust-size">X-Large(16")</label>
                                         </div>
                                     </div>
+
                                     <div class="vertical-separator"></div>
-                                    <div class="col-md-3">
+
+                                    <div class="col-md-3 my-2">
                                         <h5 class="text-info font-weight-light">GLUTEN FREE CRUST</h5>
-                                        <p class="float-left">Domino's pizza made with a gluten free crust.</p>
-                                        <div class="gluten-free mt-5 p-1">
-                                            <input  type="radio" value="small" name="gluten-free" id="glutenfree">Small(10")<br>
+                                        <p class="float-left text-subtext">Domino's pizza made with a gluten free crust.</p>
+                                        <div class="radio">
+                                            <label><input  type="radio" value="glutenfree-small" name="crust-size">Small(10")</label>
                                         </div>
                                     </div>
+
                                 </div>
                             
                             </div>
@@ -124,30 +156,41 @@
                 </div>
                 
                 <!--Choose Cheese & Sauce Tab-->
-                <div class="tab-pane fade" id="nav-vitals" role="tabpanel" aria-labelledby="nav-vitals-tab">
+                <div class="tab-pane fade" id="nav-sauce" role="tabpanel" aria-labelledby="nav-sauce-tab">
                         <div class="container">
-                            <div class="row mt-1 p-2">
+                            <div class="row">
                                 <div class="card card-body border-0"> 
                                     <h3 class="font-weight-light text-info">CHOOSE CHEESE & SAUCE</h3>
-                                    <div class="row mt-3">
-                                        <div class="col-md-5">
-                                            <h5 class="text-info font-weight-light">CHEESE ?</h5>
-                                            <div class="cheese mt-5 p-1">
-                                                    <input  type="radio" value="cheese" name="cheese" id="cheese">Cheese<br>
-                                            </div>
-                                        </div>
-                                        <div class="vertical-separator"><br/></div>
-                                        <div class="col-md-5">
-                                            <h5 class="text-info font-weight-light">CHOOSE A SAUCE</h5>
-                                            <div class="sauce mt-5 p-1">
-                                                    <input  type="radio" value="Hearty Marinara Sauce" name="sauce" id="sauce">Hearty Marinara Sauce<br>
-                                                    <input  type="radio" value="BBQ Sauce" name="sauce" id="sauce">BBQ Sauce<br>
-                                                    <input  type="radio" value="Alfredo Sauce" name="sauce" id="sauce">Alfredo Sauce<br>
-                                                    <input  type="radio" value="Garlic Pamesan White Sauce" name="sauce" id="sauce">Garlic Pamesan White Sauce<br>
-                                                    <input  type="radio" value="Robust Inspired Tomato Sauce" name="sauce" id="sauce">Robust Inspired Tomato Sauce<br>
-                                            </div>
+                                    <div class="row mt-4">
 
+                                        <div class="col-md-5 my-2">
+                                            <h5 class="text-info font-weight-light">CHEESE ?</h5>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" value="cheese" name="cheese">Cheese</label>
+                                            </div>
                                         </div>
+
+                                        <div class="vertical-separator"><br/></div>
+
+                                        <div class="col-md-5 my-2">
+                                            <h5 class="text-info font-weight-light">CHOOSE A SAUCE</h5>
+                                            <div class="radio">
+                                                <label><input type="radio" value="marinara" name="sauce">Hearty Marinara Sauce</label>
+                                            </div>
+                                            <div class="radio">
+                                                <label><input type="radio" value="bbq" name="sauce">BBQ Sauce</label>
+                                            </div>
+                                            <div class="radio">
+                                                <label><input type="radio" value="alfredo" name="sauce">Alfredo Sauce</label>
+                                            </div>
+                                            <div class="radio">
+                                                <label><input type="radio" value="garlic" name="sauce">Garlic Pamesan White Sauce</label>
+                                            </div>
+                                            <div class="radio">
+                                                <label><input type="radio" value="tomato" name="sauce">Robust Inspired Tomato Sauce</label>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -155,39 +198,70 @@
                     </div>
                 
                 <!--Choose Toppings Tab-->
-                <div class="tab-pane fade" id="nav-report" role="tabpanel" aria-labelledby="nav-report-tab">
+                <div class="tab-pane fade" id="nav-topping" role="tabpanel" aria-labelledby="nav-topping-tab">
                     <div class="container">
-                        <div class="row mt-1 p-2">
+                        <div class="row">
                             <div class="card card-body border-0"> 
                                 <h3 class="font-weight-light text-info">CHOOSE TOPPINGS</h3>
-                                <div class="row mt-3">
-                                    <div class="col-md-5">
+                                <div class="row mt-4">
+                                    <div class="col-md-5 my-2">
                                         <h5 class="text-info font-weight-light">CHOOSE MEATS ?</h5>
-                                        <div class="choose-meats mt-5 p-1">
-                                            <input  type="radio" value="Pepperoni" name="meats" id="meats">Pepperoni<br>
-                                            <input  type="radio" value="Italian Sausage" name="meats" id="meats">Italian Sausage<br>
-                                            <input  type="radio" value="Beef" name="meats" id="meats">Beef<br>
-                                            <input  type="radio" value="Ham" name="meats" id="meats">Ham<br>
-                                            <input  type="radio" value="Philly Steak" name="meats" id="meats">Philly Steak<br>
-                                            <input  type="radio" value="Bacon" name="meats" id="meats">Bacon<br>
-                                            <input  type="radio" value="Premium Chicken" name="meats" id="meats">Premium Chicken<br>                                            
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="pepperoni" name="meats">Pepperoni</label>
                                         </div>
-
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="sausage" name="meats">Italian Sausage</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="beef" name="meats">Beef</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="ham" name="meats">Ham</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="steak" name="meats">Philly Steak</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="bacon" name="meats">Bacon</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="chicken" name="meats">Premium Chicken</label>
+                                        </div>
                                     </div>
+
                                     <div class="vertical-separator"><br/></div>
-                                    <div class="col-md-5">
+
+                                    <div class="col-md-5 my-2">
                                         <h5 class="text-info font-weight-light">CHOOSE NON-MEATS</h5>
-                                        <div class="choose-nonmeats mt-5 p-1">
-                                            <input  type="radio" value="Black Olives" name="nonmeats" id="nonmeats">Black Olives<br>
-                                            <input  type="radio" value="Green Peppers" name="nonmeats" id="nonmeats">Green Peppers<br>
-                                            <input  type="radio" value="Spinach" name="nonmeats" id="nonmeats">Spinach<br>
-                                            <input  type="radio" value="Mushrooms" name="nonmeats" id="nonmeats">Mushrooms<br>
-                                            <input  type="radio" value="Onions" name="nonmeats" id="nonmeats">Onions<br>
-                                            <input  type="radio" value="Pineapple" name="nonmeats" id="nonmeats">Pineapple<br>
-                                            <input  type="radio" value="Diced Tomato" name="nonmeats" id="nonmeats">Diced Tomato<br>
-                                            <input  type="radio" value="Feta Cheese" name="nonmeats" id="nonmeats">Feta Cheese<br>
-                                            <input  type="radio" value="Cheddar Cheese" name="nonmeats" id="nonmeats">Cheddar Cheese<br>
-                                            <input  type="radio" value="Hot Sauce" name="nonmeats" id="nonmeats">Hot Sauce<br>                                            
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="black-olives" name="nonmeats">Black Olives</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="green-peppers" name="nonmeats">Green Peppers</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="spinach" name="nonmeats">Spinach</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="mushrooms" name="nonmeats">Mushrooms</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="onions" name="nonmeats">Onions</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="pineapple" name="nonmeats">Pineapple</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="diced-tomato" name="nonmeats">Diced Tomato</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="feta-cheese" name="nonmeats">Feta Cheese</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="cheddar-cheese" name="nonmeats">Cheddar Cheese</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" value="hot-sauce" name="nonmeats">Hot Sauce</label>
                                         </div>
                                     </div>
                                 </div>
@@ -198,13 +272,14 @@
             </div>
             <div class="row m-2 p-2">
                 <div class="col-md-5 col-offset-1">
-                    <button class="btn btn-dark btn-lg btn-block" id='submitButton' onclick="b">BUILD</button>
+                    <button type="submit" class="btn btn-dark btn-lg btn-block" id='submitButton' onclick=buildPizza();>BUILD</button>
                 </div>
                 <!-- <div class="col-md-3 bg-light"></div> -->
                 <div class="col-md-5 col-offset-1">
                     <button class="btn btn-dark btn-lg btn-block" type='reset'>CANCEL</button>
                 </div>
             </div>
+        </form>
         </div>
     </body>
         
