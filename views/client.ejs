@@ -53,17 +53,37 @@
         </style>
 
         <script>
+            function getCheckedBoxes(chkboxName) {
+                var checkboxes = document.getElementsByName(chkboxName);
+                var checkboxesChecked = [];
+                // loop over them all
+                for (var i=0; i<checkboxes.length; i++) {
+                    // And stick the checked ones onto an array...
+                    if (checkboxes[i].checked) {
+                        checkboxesChecked.push(checkboxes[i].value);
+                    }
+                }
+                // Return the array if it is non-empty, or null
+                return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+            }
+
             function buildPizza(e){
                 e.preventDefault();
+                var formValues = document.getElementById('build-pizza-form').elements;
 
-                console.log(e.target)
+                console.log("Crust-Size = " + formValues.namedItem('crust-size').value);
+                console.log("Cheese = " + formValues.namedItem('cheese').value);
+                console.log("Sauce = " + formValues.namedItem('sauce').value);
+                console.log("Meats = " + getCheckedBoxes('meats'));
+                console.log("Non-meats = " + getCheckedBoxes('nonmeats'));
+                return false;
             }
         </script>
     
     </head>
     
     <body>
-        <div><h2 class="text-center text-light font-weight-light mt-2"><img src="/images/pizza.ico" width="80px" height="80px">Build Your Own Pizza</h2></div>
+        <div><h2 class="text-center text-light font-weight-light mt-2">Build Your Own Pizza<img src="/images/pizza.ico" width="80px" height="80px"></h2></div>
         <div class="container p-2 w-90 h-80 bg-light ">
             <nav class="navbar navbar-light my-2 p-2 rounded d-flex justify-content-center w-100" style="background-color:rgb(124, 159, 223)">
                 <div class="nav nav-pills red" id="nav-tab" role="tablist" style="font-weight: 600; color:mintcream">
@@ -72,7 +92,7 @@
                     <a class="nav-item nav-link" id="nav-topping-tab" data-toggle="tab" href="#nav-topping" role="tab" aria-controls="nav-topping" aria-selected="false">TOPPINGS</a>
                 </div>
             </nav>
-            <form name="build-pizza">
+            <form name="build-pizza" id="build-pizza-form" onsubmit="return buildPizza(event)">
             <div class="tab-content" id="nav-tabContent">
                 
                 <!--Size & Crust Tab-->
@@ -165,8 +185,11 @@
 
                                         <div class="col-md-5 my-2">
                                             <h5 class="text-info font-weight-light">CHEESE ?</h5>
-                                            <div class="checkbox">
-                                                <label><input type="checkbox" value="cheese" name="cheese">Cheese</label>
+                                            <div class="radio">
+                                                    <label><input type="radio" value="cheese" name="cheese">No Cheese</label>
+                                                </div>
+                                            <div class="radio">
+                                                <label><input type="radio" value="cheese" name="cheese" checked>Cheese</label>
                                             </div>
                                         </div>
 
@@ -272,7 +295,7 @@
             </div>
             <div class="row m-2 p-2">
                 <div class="col-md-5 col-offset-1">
-                    <button type="submit" class="btn btn-dark btn-lg btn-block" id='submitButton' onclick=buildPizza();>BUILD</button>
+                    <button type="submit" class="btn btn-dark btn-lg btn-block" onclick=buildPizza(event)>BUILD</button>
                 </div>
                 <!-- <div class="col-md-3 bg-light"></div> -->
                 <div class="col-md-5 col-offset-1">
