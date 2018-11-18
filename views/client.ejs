@@ -71,11 +71,30 @@
                 e.preventDefault();
                 var formValues = document.getElementById('build-pizza-form').elements;
 
-                console.log("Crust-Size = " + formValues.namedItem('crust-size').value);
-                console.log("Cheese = " + formValues.namedItem('cheese').value);
-                console.log("Sauce = " + formValues.namedItem('sauce').value);
-                console.log("Meats = " + getCheckedBoxes('meats'));
-                console.log("Non-meats = " + getCheckedBoxes('nonmeats'));
+                var newOrder = {};
+                newOrder['crust-size'] = formValues.namedItem('crust-size').value;
+                newOrder['cheese'] = formValues.namedItem('cheese').value;
+                newOrder['sauce'] = formValues.namedItem('sauce').value;
+                newOrder['meats'] = getCheckedBoxes('meats');
+                newOrder['nonmeats'] = getCheckedBoxes('nonmeats');
+
+                console.log(JSON.stringify(newOrder));
+
+                if(localStorage){
+                    let orders;
+                    if(localStorage.getItem('pizza-orders')){
+                        orders = JSON.parse(localStorage.getItem('pizza-orders'));
+                    }
+                    else{
+                        orders = [];
+                    }
+                    orders.push(newOrder);
+                    localStorage.setItem('pizza-orders', JSON.stringify(orders));
+
+                }
+                else{
+                    alert("Your browser does not support localStorage. This website needs locaStorage to work.");
+                }
                 return false;
             }
         </script>
